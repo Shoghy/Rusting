@@ -54,7 +54,7 @@ public abstract record Option<T>
 	public T Unwrap() =>
 		this is Some(T value) ? value : throw new Exception("Calling `Unwrap` on a `None`");
 
-	public T UnwarpOr(T def) => this is Some(T value) ? value : def;
+	public T UnwrapOr(T def) => this is Some(T value) ? value : def;
 
 	public T UnwrapOrElse(Func<T> func) => this is Some(T value) ? value : func();
 
