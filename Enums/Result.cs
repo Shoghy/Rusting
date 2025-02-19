@@ -171,6 +171,24 @@ public abstract record Result<T, E>
 			_ => throw new UnreachableException(),
 		};
 	}
+
+	public Result<T, E> Inspect(SingleParamVoidFunc<T> func)
+	{
+		if (this is Ok(T value))
+		{
+			func(value);
+		}
+		return this;
+	}
+
+	public Result<T, E> InspectErr(SingleParamVoidFunc<E> func)
+	{
+		if (this is Err(E error))
+		{
+			func(error);
+		}
+		return this;
+	}
 }
 
 public static class ResultExt
