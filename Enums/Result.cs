@@ -144,6 +144,33 @@ public abstract record Result<T, E>
 			_ => new Option<E>.None(),
 		};
 	}
+
+	public void Match(SingleParamVoidFunc<T> ok, SingleParamVoidFunc<E> err)
+	{
+		switch (this)
+		{
+			case Ok(T value):
+			{
+				ok(value);
+				break;
+			}
+			case Err(E value):
+			{
+				err(value);
+				break;
+			}
+		}
+	}
+
+	public R Match<R>(SingleParamFunc<T, R> ok, SingleParamFunc<E, R> err)
+	{
+		return this switch
+		{
+			Ok(T value) => ok(value),
+			Err(E error) => err(error),
+			_ => throw new UnreachableException(),
+		};
+	}
 }
 
 public static class ResultExt

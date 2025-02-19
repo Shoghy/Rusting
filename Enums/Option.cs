@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Rusting.Enums;
 
 public abstract record Option<T>
@@ -81,4 +83,31 @@ public abstract record Option<T>
 
 	public Result<T, E> OkOrElse<E>(Func<E> func) =>
 		this is Some(T value) ? new Result<T, E>.Ok(value) : new Result<T, E>.Err(func());
+
+	public void Match(SingleParamVoidFunc<T> some, FuncVoid none)
+	{
+		switch (this)
+		{
+			case Some(T value):
+			{
+				some(value);
+				break;
+			}
+			case None:
+			{
+				none();
+				break;
+			}
+		}
+	}
+
+	public R Match<R>(SingleParamFunc<T, R> some, Func<R> none)
+	{
+		return this switch
+		{
+			Some(T value) => some(value),
+			None => none(),
+			_ => throw new UnreachableException(),
+		};
+	}
 }
