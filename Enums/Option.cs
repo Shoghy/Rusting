@@ -10,6 +10,17 @@ public abstract record Option<T>
 
 	public bool IsSome() => this is Some;
 
+	public bool IsSome(out T? value)
+	{
+		if (this is Some(T val))
+		{
+			value = val;
+			return true;
+		}
+		value = default;
+		return false;
+	}
+
 	public bool IsSomeAnd(SingleParamFunc<T, bool> func) => this is Some(T value) && func(value);
 
 	public bool IsNone() => this is None;

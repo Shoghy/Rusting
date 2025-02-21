@@ -16,7 +16,29 @@ public abstract record Result<T, E>
 
 	public bool IsOk() => this is Ok;
 
+	public bool IsOk(out T? value)
+	{
+		if (this is Ok(T val))
+		{
+			value = val;
+			return true;
+		}
+		value = default;
+		return false;
+	}
+
 	public bool IsErr() => this is Err;
+
+	public bool IsErr(out E? value)
+	{
+		if (this is Err(E val))
+		{
+			value = val;
+			return true;
+		}
+		value = default;
+		return false;
+	}
 
 	public Result<U, E> And<U>(Result<U, E> res)
 	{
